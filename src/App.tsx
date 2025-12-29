@@ -1,50 +1,146 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
+import { useState, useEffect, useCallback } from "react";
+import { FileTree } from "./components/FileTree";
+import { FileViewer } from "./components/FileViewer";
+import {
+  TreeNode,
+  selectFolder,
+  listTree,
+  readTextFile,
+  saveWorkspacePath,
+  loadWorkspacePath,
+} from "./lib/tauri";
 import "./App.css";
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+  const [workspacePath, setWorkspacePath] = useState<string | null>(null);
+  const [tree, setTree] = useState<TreeNode | null>(null);
+  const [treeLoading, setTreeLoading] = useState(false);
+  const [treeError, setTreeError] = useState<string | null>(null);
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
-  }
+  const [selectedFilePath, setSelectedFilePath] = useState<string | null>(null);
+  const [fileContent, setFileContent] = useState<string | null>(null);
+  const [fileLoading, setFileLoading] = useState(false);
+  const [fileError, setFileError] = useState<string | null>(null);
+
+  const [searchFilter, setSearchFilter] = useState("");
+
+  useEffect(() => {
+    async function loadLastWorkspace() {
+      try {
+        const lastPath = await loadWorkspacePath();
+        if (lastPath) {
+          await handleLoadTree(lastPath);
+        }
+      } catch (error) {
+        console.error("Failed to load last workspace:", error);
+      }
+    }
+    loadLastWorkspace();
+  }, []);
+
+  const handleLoadTree = useCallback(async (path: string) => {
+    setTreeLoading(true);
+    setTreeError(null);
+    setTree(null);
+    setWorkspacePath(path);
+    setSelectedFilePath(null);
+    setFileContent(null);
+    setFileError(null);
+
+    try {
+      const treeData = await listTree(path);
+      setTree(treeData);
+      await saveWorkspacePath(path);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      setTreeError(message);
+    } finally {
+      setTreeLoading(false);
+    }
+  }, []);
+
+  const handleConnectFolder = useCallback(async () => {
+    try {
+      const path = await selectFolder();
+      if (path) {
+        await handleLoadTree(path);
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      setTreeError(`Failed to open folder picker: ${message}`);
+    }
+  }, [handleLoadTree]);
+
+  const handleFileSelect = useCallback(
+    async (relPath: string) => {
+      if (!workspacePath) return;
+
+      setSelectedFilePath(relPath);
+      setFileLoading(true);
+      setFileError(null);
+      setFileContent(null);
+
+      try {
+        const content = await readTextFile(workspacePath, relPath);
+        setFileContent(content);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        setFileError(message);
+      } finally {
+        setFileLoading(false);
+      }
+    },
+    [workspacePath]
+  );
+  const displayPath = workspacePath
+    ? workspacePath.length > 40
+      ? "…" + workspacePath.slice(-38)
+      : workspacePath
+    : null;
 
   return (
-    <main className="container">
-      <h1>Welcome to Tauri + React</h1>
+    <div className="app-container">
+      <header className="app-header">
+        <h1 className="app-title">Ponder</h1>
+        <div className="app-header-actions">
+          {displayPath && (
+            <span className="workspace-path" title={workspacePath || ""}>
+              📁 {displayPath}
+            </span>
+          )}
+          <button
+            className="connect-button"
+            onClick={handleConnectFolder}
+            disabled={treeLoading}
+          >
+            {treeLoading ? "Loading…" : "Connect folder"}
+          </button>
+        </div>
+      </header>
 
-      <div className="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
+      <main className="app-main">
+        <aside className="app-sidebar">
+          <FileTree
+            tree={tree}
+            selectedPath={selectedFilePath}
+            onFileSelect={handleFileSelect}
+            isLoading={treeLoading}
+            error={treeError}
+            searchFilter={searchFilter}
+            onSearchChange={setSearchFilter}
+          />
+        </aside>
 
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
-    </main>
+        <section className="app-content">
+          <FileViewer
+            content={fileContent}
+            filePath={selectedFilePath}
+            isLoading={fileLoading}
+            error={fileError}
+          />
+        </section>
+      </main>
+    </div>
   );
 }
 
