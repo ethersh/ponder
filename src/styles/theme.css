@@ -1,0 +1,109 @@
+:root {
+    /* Backgrounds */
+    --bg: #0f0d0b;
+    --panel: #14110e;
+    --panel-2: #191512;
+    --panel-3: #1e1a16;
+
+    /* Borders */
+    --border: rgba(255, 255, 255, 0.06);
+    --border-2: rgba(255, 255, 255, 0.09);
+    --border-3: rgba(255, 255, 255, 0.12);
+
+    /* Text hierarchy */
+    --text: rgba(255, 255, 255, 0.88);
+    --text-dim: rgba(255, 255, 255, 0.62);
+    --text-faint: rgba(255, 255, 255, 0.42);
+    --text-ghost: rgba(255, 255, 255, 0.25);
+
+    /* Accent */
+    --accent: #c98b3a;
+    --accent-2: #a46a2c;
+    --accent-soft: rgba(201, 139, 58, 0.18);
+    --accent-glow: rgba(201, 139, 58, 0.15);
+    --accent-border: rgba(201, 139, 58, 0.35);
+
+    /* Semantic colors */
+    --danger: #e06c75;
+    --ok: #98c379;
+    --warning: #e5c07b;
+    --info: #61afef;
+
+    /* Effects */
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+
+    /* Radii */
+    --radius: 10px;
+    --radius-sm: 8px;
+    --radius-xs: 6px;
+
+    /* Typography */
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+    /* Sizing */
+    --topbar-height: 44px;
+    --sidebar-width: 300px;
+}
+
+/* Reset & Base */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.14);
+}
+
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+/* Focus styles */
+:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+/* Selection */
+::selection {
+    background: var(--accent-soft);
+}

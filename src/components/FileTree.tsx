@@ -122,8 +122,7 @@ function TreeNodeItem({
                     {node.name}
                 </span>
                 {!isDir && node.size_bytes !== undefined && (
-                    <span className="file-tree-size">
-                        {node.is_too_large ? "⚠️ " : ""}
+                    <span className={`file-tree-size ${node.is_too_large ? "too-large" : ""}`}>
                         {formatFileSize(node.size_bytes)}
                     </span>
                 )}

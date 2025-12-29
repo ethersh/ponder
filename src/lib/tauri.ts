@@ -20,7 +20,7 @@ let storeInstance: Store | null = null;
 
 async function getStore(): Promise<Store> {
     if (!storeInstance) {
-        storeInstance = await load(STORE_NAME, { autoSave: true });
+        storeInstance = await load(STORE_NAME, { autoSave: true, defaults: {} });
     }
     return storeInstance;
 }

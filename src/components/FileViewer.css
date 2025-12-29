@@ -2,45 +2,56 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    background: var(--viewer-bg);
+    background: var(--panel-2);
+    border-radius: var(--radius);
+    margin: 8px;
+    border: 1px solid var(--border);
+    overflow: hidden;
 }
 
 .file-viewer-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 8px 12px;
-    background: var(--header-bg);
-    border-bottom: 1px solid var(--border-color);
-    min-height: 36px;
+    padding: 10px 14px;
+    background: var(--panel-3);
+    border-bottom: 1px solid var(--border);
+    min-height: 40px;
 }
 
 .file-viewer-path {
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: 500;
-    color: var(--text-color);
+    color: var(--text);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .file-viewer-info {
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 12px;
-    color: var(--text-muted);
+    gap: 10px;
+    font-size: 11px;
+    color: var(--text-faint);
 }
 
 .file-viewer-language {
-    padding: 2px 6px;
-    background: var(--tag-bg);
-    border-radius: 3px;
+    padding: 3px 8px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-border);
+    border-radius: var(--radius-xs);
+    color: var(--accent);
+    font-weight: 500;
     text-transform: lowercase;
 }
 
 .file-viewer-lines {
     white-space: nowrap;
+    color: var(--text-ghost);
 }
 
 .file-viewer-content {
@@ -51,10 +62,10 @@
 
 .file-viewer-pre {
     margin: 0;
-    padding: 8px 0;
-    font-family: "SF Mono", "Fira Code", "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
-    font-size: 13px;
-    line-height: 1.5;
+    padding: 12px 0;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.6;
     tab-size: 4;
 }
 
@@ -64,35 +75,37 @@
 }
 
 .file-viewer-line:hover {
-    background: var(--hover-bg);
+    background: rgba(255, 255, 255, 0.02);
 }
 
 .file-viewer-line-number {
     flex-shrink: 0;
-    padding: 0 12px;
+    padding: 0 14px;
     text-align: right;
-    color: var(--line-number-color);
+    color: var(--text-ghost);
     user-select: none;
-    border-right: 1px solid var(--border-color);
-    margin-right: 12px;
-    background: var(--line-number-bg);
+    border-right: 1px solid var(--border);
+    margin-right: 14px;
+    background: var(--panel-2);
+    font-size: 11px;
 }
 
 .file-viewer-line-content {
     flex: 1;
-    padding-right: 12px;
+    padding-right: 14px;
     white-space: pre;
     overflow-x: visible;
+    color: var(--text);
 }
 
 .file-viewer-loading {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
     height: 100%;
-    color: var(--text-muted);
-    font-size: 14px;
+    color: var(--text-faint);
+    font-size: 13px;
 }
 
 .file-viewer-loading .loading-spinner {
@@ -114,30 +127,35 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
     flex: 1;
-    color: var(--text-muted);
-    padding: 24px;
+    color: var(--text-faint);
+    padding: 28px;
     text-align: center;
 }
 
 .file-viewer-error .error-icon {
-    font-size: 32px;
+    font-size: 36px;
+    opacity: 0.6;
 }
 
 .file-viewer-error .error-title {
     margin: 0;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
-    color: var(--text-color);
+    color: var(--text-dim);
 }
 
 .file-viewer-error .error-message {
     margin: 0;
-    font-size: 13px;
-    color: var(--error-color);
-    max-width: 400px;
+    font-size: 12px;
+    color: var(--danger);
+    max-width: 360px;
     word-break: break-word;
+    padding: 8px 12px;
+    background: rgba(224, 108, 117, 0.08);
+    border: 1px solid rgba(224, 108, 117, 0.15);
+    border-radius: var(--radius-sm);
 }
 
 .file-viewer-empty {
@@ -147,13 +165,14 @@
     justify-content: center;
     gap: 8px;
     height: 100%;
-    color: var(--text-muted);
-    font-size: 14px;
+    color: var(--text-faint);
+    font-size: 13px;
 }
 
 .file-viewer-empty .empty-icon {
-    font-size: 32px;
-    margin-bottom: 8px;
+    font-size: 40px;
+    margin-bottom: 10px;
+    opacity: 0.4;
 }
 
 .file-viewer-empty p {

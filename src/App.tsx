@@ -102,12 +102,10 @@ function App() {
     <div className="app-container">
       <header className="app-header">
         <h1 className="app-title">Ponder</h1>
+        <span className="workspace-path" title={workspacePath || ""}>
+          {displayPath || "No workspace selected"}
+        </span>
         <div className="app-header-actions">
-          {displayPath && (
-            <span className="workspace-path" title={workspacePath || ""}>
-              📁 {displayPath}
-            </span>
-          )}
           <button
             className="connect-button"
             onClick={handleConnectFolder}
